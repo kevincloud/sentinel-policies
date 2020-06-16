@@ -16,15 +16,16 @@ get_resource = func(resource_type) {
 get_rx = function(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
-        print(r.values)
+        print(tfplan.planned_values.resources[r].type)
+        print(tfplan.planned_values.resources[r].values)
     }
-    return null
+    return resources
 }
 
 get_setting = func(resources, setting_name) {
     values = []
     for resources as r {
-        print(r)
+        # print(r)
         # for r.value as v {
         #     if strings.to_lower(setting_name) == strings.to_lower(v) {
         #         values.append(v)
