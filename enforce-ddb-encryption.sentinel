@@ -9,24 +9,22 @@ get_resources = func(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
         if tfplan.planned_values.resources[r].type == resource_type {
-            for tfplan.planned_values.resources[r].values as v {
-                print(v)
-                print(tfplan.planned_values.resources[r].values[v])
-            }
+            resources.append(r)
         }
     }
     return resources
 }
 
-get_setting = func(resources, setting_name) {
-    values = []
+is_enc_enabled = func(resources, setting_name) {
+    retval = false
     for resources as r {
-        # print(r)
-        # for r.value as v {
-        #     if strings.to_lower(setting_name) == strings.to_lower(v) {
-        #         values.append(v)
-        #     }
-        # }
+        for tfplan.planned_values.resources[r].values as v {
+            if tfplan.planned_values.resources[r].values[setting_name] == null {
+                retval = false
+            } else if tfplan.planned_values.resources[r].values[setting_name].enabled == true {
+                retval = true
+            }
+        }
     }
     return values
 }
@@ -34,8 +32,6 @@ get_setting = func(resources, setting_name) {
 
 ddb_tables = get_resources("aws_dynamodb_table")
 
-sse_value = get_setting(ddb_tables, "server_side_encryption")
+sse_value = is_enc_enabled(ddb_tables, "server_side_encryption")
 
-myvalue = true
-
-main = rule { myvalue }
+main = rule { sse_value }
