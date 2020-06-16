@@ -5,19 +5,15 @@ import "json"
 
 param provider
 
-get_resource = func(resource_type) {
-    resources = filter tfplan.planned_values.resources as _, r {
-        r.mode is "managed" and
-        r.type is resource_type
-    }
-    return resources
-}
-
-get_rx = func(resource_type) {
+get_resources = func(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
-        print(tfplan.planned_values.resources[r].type)
-        print(tfplan.planned_values.resources[r].values)
+        if tfplan.planned_values.resources[r].type == resource_type {
+            for tfplan.planned_values.resources[r].values as v {
+                print(v)
+                print(tfplan.planned_values.resources[r].values[v])
+            }
+        }
     }
     return resources
 }
@@ -35,7 +31,6 @@ get_setting = func(resources, setting_name) {
     return values
 }
 
-tasdf = get_rx("aws_dynamodb_table")
 
 ddb_tables = get_resource("aws_dynamodb_table")
 
