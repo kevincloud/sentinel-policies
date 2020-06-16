@@ -8,6 +8,8 @@
 #
 
 import "tfplan/v2" as plan
+import "http"
+import "json"
 
 req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/can-delete")
 res = json.unmarshal(http.get(req).body)
