@@ -15,10 +15,10 @@ req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/can-d
 res = json.unmarshal(http.get(req).body)
 prevent_delete = res["prevent-deletion"]
 
-should_delete = "delete"
+should_delete = "exempt"
 
 if prevent_delete == "true" {
-    should_delete = "false"
+    should_delete = "delete"
 }
 
 # Get all resources which will be deleted
