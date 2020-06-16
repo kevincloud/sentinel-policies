@@ -13,6 +13,14 @@ get_resource = func(resource_type) {
     return resources
 }
 
+get_rx = function(resource_type) {
+    resources = []
+    for tfplan.planned_values.resources as r {
+        print(r.values)
+    }
+    return null
+}
+
 get_setting = func(resources, setting_name) {
     values = []
     for resources as r {
@@ -25,6 +33,8 @@ get_setting = func(resources, setting_name) {
     }
     return values
 }
+
+tasdf = get_rx("aws_dynamodb_table")
 
 ddb_tables = get_resource("aws_dynamodb_table")
 
