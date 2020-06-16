@@ -1,0 +1,28 @@
+#
+# This module prevents resources from being deleted. 
+# Ideally, blanket delete suppression is not recommended. 
+# However, there are occasions when accidental deletions 
+# could be catastrophic. So having the ability to either 
+# completely prevent, or provide an override mechanism, 
+# would be helpful.
+#
+
+import "tfplan/v2" as plan
+
+req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/can-delete")
+res = json.unmarshal(http.get(req).body)
+prevent_delete = res["prevent-deletion"]
+
+should_delete = "delete"
+
+if prevent_delete == true {
+    should_delete = "false"
+}
+
+# Get all resources which will be deleted
+delete_actions = filter plan.resource_changes as _, rc {
+    should_delete in rc.change.actions
+}
+
+# If the list is empty, we passed!
+main = rule { length(delete_actions) is 0 }

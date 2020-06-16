@@ -1,0 +1,41 @@
+import "tfplan/v2" as tfplan
+import "http"
+import "json"
+import "strings"
+
+param provider
+
+# Get all Azure VMs from all modules
+azure_vms = filter tfplan.resource_changes as _, res {
+    res.mode is "managed" and
+    res.type is "azurerm_virtual_machine"
+}
+
+# Allowed Types
+req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/approved-instances/" + provider)
+res = json.unmarshal(http.get(req).body)
+allowed_types_orig = res
+
+# Convert to lower case
+allowed_types = []
+for allowed_types_orig as a {
+    append(allowed_types, strings.to_lower(a))
+}
+
+# Rule to restrict instance types
+instance_type_allowed = func(vms, types) {
+    for vms as _, vm {
+        if vm.change.after is not null {
+            vmsize = strings.to_lower(vm.change.after.vm_size)
+            if vmsize not in types {
+                print("VM Size of " + vm.change.after.vm_size + " is not allowed")
+                return false
+            }
+        }
+    }
+    print("All declared VMs are in the approved list")
+    return true
+}
+
+# Main rule that requires other rules to be true
+main = rule { instance_type_allowed(azure_vms, allowed_types) }
