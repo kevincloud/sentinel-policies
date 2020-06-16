@@ -13,7 +13,7 @@ get_resource = func(resource_type) {
     return resources
 }
 
-get_rx = function(resource_type) {
+get_rx = func(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
         print(tfplan.planned_values.resources[r].type)
