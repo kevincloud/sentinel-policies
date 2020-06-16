@@ -1,0 +1,35 @@
+import "tfplan/v2" as tfplan
+import "strings"
+import "http"
+import "json"
+
+param provider
+
+get_resource = func(resource_type) {
+    resources = filter tfplan.planned_values.resources as _, r {
+        r.mode is "managed" and
+        r.type is resource_type
+    }
+    return resources
+}
+
+get_setting = func(resources, setting_name) {
+    values = []
+    for resources as r {
+        print(r)
+        for r.value as v {
+            if strings.to_lower(setting_name) == strings.to_lower(v) {
+                values.append(v)
+            }
+        }
+    }
+    return nil
+}
+
+ddb_tables = get_resource("aws_dynamodb_table")
+
+sse_value = get_setting(ddb_tables, "server_side_encryption")
+
+myvalue = true
+
+main = rule { myvalue }

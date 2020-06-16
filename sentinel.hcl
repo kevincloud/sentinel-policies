@@ -21,3 +21,7 @@ policy "prevent-destroy" {
 policy "limit-custom-resources" {
     enforcement_level = "hard-mandatory"
 }
+
+policy "enforce-ddb-encryption" {
+    enforcement_level = "soft-mandatory"
+}
