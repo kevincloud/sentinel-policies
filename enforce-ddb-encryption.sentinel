@@ -32,7 +32,7 @@ get_setting = func(resources, setting_name) {
 }
 
 
-ddb_tables = get_resource("aws_dynamodb_table")
+ddb_tables = get_resources("aws_dynamodb_table")
 
 sse_value = get_setting(ddb_tables, "server_side_encryption")
 
