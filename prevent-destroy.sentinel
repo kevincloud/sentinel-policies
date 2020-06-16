@@ -17,7 +17,7 @@ prevent_delete = res["prevent-deletion"]
 
 should_delete = "delete"
 
-if prevent_delete == true {
+if prevent_delete == "true" {
     should_delete = "false"
 }
 
