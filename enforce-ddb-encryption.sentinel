@@ -23,7 +23,7 @@ get_setting = func(resources, setting_name) {
             }
         }
     }
-    return nil
+    return null
 }
 
 ddb_tables = get_resource("aws_dynamodb_table")
