@@ -8,6 +8,8 @@
 
 import "tfrun"
 import "decimal"
+import "http"
+import "json"
 
 ##### Functions #####
 
