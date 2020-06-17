@@ -16,13 +16,11 @@ get_resources = func(resource_type) {
 
 star_items = func(resources) {
     for resources as r {
-        print("resource: " + r)
         for tfplan.planned_values.resources[r].values as v {
-            # if v == "assume_role_policy" {
-                print(v + " value: ")
-                print(tfplan.planned_values.resources[r].values[v])
-            # }
-            print("--------------------")
+            if v == "policy" {
+                res = json.unmarshal(tfplan.planned_values.resources[r].values[v])
+                print(res["Statement"]["Action"])
+            }
         }
     }
     return true
