@@ -29,15 +29,24 @@ has_tags = func(resources, tags) {
                 retval = false
             } else {
                 print("Tags: ")
-                for tfplan.planned_values.resources[r].values["tags"] as tag {
-                    print("  " + tag + ": " + tfplan.planned_values.resources[r].values["tags"][tag])
-                    val = tfplan.planned_values.resources[r].values["tags"][tag]
-                    if tag not in tags {
-                        append(no_tag, tag)
-                    } else if val == "" or val == null {
+                for tags as tag {
+                    if tag in tfplan.planned_values.resources[r].values["tags"] {
+                        print("  " + tag + ": " + tfplan.planned_values.resources[r].values["tags"][tag])
+                        if val == "" or val == null {
+                            append(no_tag, tag)
+                        }
+                    } else {
                         append(no_tag, tag)
                     }
                 }
+                # for tfplan.planned_values.resources[r].values["tags"] as tag {
+                #     val = tfplan.planned_values.resources[r].values["tags"][tag]
+                #     if tag not in tags {
+                #         append(no_tag, tag)
+                #     } else if val == "" or val == null {
+                #         append(no_tag, tag)
+                #     }
+                # }
             }
         }
     }
