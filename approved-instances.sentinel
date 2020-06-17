@@ -46,23 +46,27 @@ get_approved_list = func() {
 }
 
 # Rule to restrict instance types
-instance_type_allowed = func(vms, types) {
-    for vms as _, vm {
-        if vm.change.after is not null {
-            vmsize = strings.to_lower(vm.change.after.vm_size)
-            if vmsize not in types {
-                print("VM Size of " + vm.change.after.vm_size + " is not allowed")
-                return false
+instance_type_allowed = func(vms, types, prov) {
+#     if prov == "azurerm" {
+        for vms as _, vm {
+            if vm.change.after is not null {
+                print(vm.change.after)
+                # vmsize = strings.to_lower(vm.change.after.vm_size)
+                # if vmsize not in types {
+                #     print("VM Size of " + vm.change.after.vm_size + " is not allowed")
+                #     return false
+                # }
             }
         }
-    }
+#     } else if prov == "aws" {
+#     }
     print("All declared VMs are in the approved list")
     return true
 }
 
 vm_list = get_compute_instances(provider)
 allowed = get_approved_list()
-is_allowed = instance_type_allowed(vm_list, allowed)
+is_allowed = instance_type_allowed(vm_list, allowed, prov)
 
 # Main rule that requires other rules to be true
 main = rule { is_allowed }
