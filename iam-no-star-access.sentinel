@@ -19,9 +19,9 @@ star_items = func(resources) {
         print("resource: " + r)
         for tfplan.planned_values.resources[r].values as v {
             print(v + ": ")
-            for tfplan.planned_values.resources[r].values[v] as x {
-                print(x)
-            }
+            # for tfplan.planned_values.resources[r].values[v] as x {
+            #     print(x)
+            # }
         }
     }
     return true
