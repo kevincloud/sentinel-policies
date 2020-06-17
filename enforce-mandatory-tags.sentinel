@@ -1,22 +1,44 @@
-# This policy uses the Sentinel tfplan/v2 import to require that
-# all Azure VMs have all mandatory tags
+import "tfplan/v2" as tfplan
+import "strings"
+import "http"
+import "json"
 
-# Import common-functions/tfplan-functions/tfplan-functions.sentinel
-# with alias "plan"
-import "tfplan-functions" as plan
+param provider
 
-# List of mandatory tags
-mandatory_tags = ["environment"]
+mandatory_tags = [
+    "environment",
+    "department",
+]
 
-# Get all Azure VMs
-allAzureVMs = plan.find_resources("azurerm_virtual_machine")
-
-# Filter to Azure VMs with violations
-# Warnings will be printed for all violations since the last parameter is true
-violatingAzureVMs = plan.filter_attribute_not_contains_list(allAzureVMs,
-                    "tags", mandatory_tags, true)
-
-# Main rule
-main = rule {
-  length(violatingAzureVMs["messages"]) is 0
+get_resources = func(resource_type) {
+    resources = []
+    for tfplan.planned_values.resources as r {
+        if tfplan.planned_values.resources[r].type == resource_type {
+            append(resources, r)
+        }
+    }
+    return resources
 }
+
+has_tags = func(resources, setting_name) {
+    retval = false
+    for resources as r {
+        for tfplan.planned_values.resources[r].values as v {
+            print("Attribute: " + v)
+            # if strings.to_lower(v) == strings.to_lower(setting_name) {
+            #     for tfplan.planned_values.resources[r].values[v] as x {
+            #         print(v + ": ")
+            #         print(x)
+            #         if x["enabled"] {
+            #             retval = true
+            #         }
+            #     }
+            # }
+        }
+    }
+    return retval
+}
+
+result = true
+
+main = rule { result }
