@@ -3,6 +3,8 @@ import "strings"
 import "http"
 import "json"
 
+param provider
+
 get_resources = func(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
@@ -14,22 +16,41 @@ get_resources = func(resource_type) {
     return resources
 }
 
-star_items = func(resources) {
+no_star_items = func(resources) {
+    prohibited_items = []
     for resources as r {
         for tfplan.planned_values.resources[r].values as v {
             if v == "policy" {
                 res = json.unmarshal(tfplan.planned_values.resources[r].values[v])
                 for res["Statement"][0]["Action"] as a {
                     n = strings.split(a, ":")
-                    print(a + ": " + string(length(n)))
+                    if n[1] == "*" {
+                        append(prohibited_items, n[0])
+                    }
                 }
             }
         }
     }
-    return true
+    if length(prohibited_items) > 0 {
+        print("Full access (*) is prohibited in the following resources in your policy:")
+        for prohibited_items as item {
+            print("   " + item)
+        }
+        return false
+    } else {
+        return true
+    }
 }
 
-iam_roles = get_resources("aws_iam_policy")
-violations = star_items(iam_roles)
 
-main = rule { violations }
+proceed = false
+
+if provider == "aws" {
+    iam_roles = get_resources("aws_iam_policy")
+    proceed = no_star_items(iam_roles)
+} else {
+    print("This policy is for a different provider and will not be processed")
+    proceed = true
+}
+
+main = rule { proceed }
