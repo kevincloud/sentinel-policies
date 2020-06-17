@@ -26,11 +26,11 @@ has_tags = func(resources, tags) {
         print(tfplan.planned_values.resources[r])
         if "tags" in tfplan.planned_values.resources[r].values {
             if tfplan.planned_values.resources[r].values["tags"] == null {
-                print(tfplan.planned_values.resources[r].values["tags"])
                 retval = false
             } else {
+                print("Tags: ")
                 for tfplan.planned_values.resources[r].values["tags"] as t {
-                    print("Tag: " + t)
+                    print("  " + t + ": " + tfplan.planned_values.resources[r].values["tags"][t])
                     # if strings.to_lower(v) == strings.to_lower(setting_name) {
                     #     for tfplan.planned_values.resources[r].values[v] as x {
                     #         print(v + ": ")
