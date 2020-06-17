@@ -18,13 +18,18 @@ get_resources = func(resource_type) {
 is_enc_enabled = func(resources, setting_name) {
     retval = false
     for resources as r {
-        if setting_name in tfplan.planned_values.resources[r].values {
-            print("setting_name: " + string(tfplan.planned_values.resources[r].values[setting_name]))
+        for tfplan.planned_values.resources[r].values as v {
+            if string.to_lower(v) == string.to_lower(setting_name) {
+                print("setting name: " + v)
+            }
+        }
+        # if setting_name in tfplan.planned_values.resources[r].values {
+        #     print("setting_name: " + string(tfplan.planned_values.resources[r].values[setting_name]))
             # if tfplan.planned_values.resources[r].values[setting_name]["enabled"] == true {
             #     print("setting_enabled: " + tfplan.planned_values.resources[r].values[setting_name]["enabled"])
             #     retval = true
             # }
-        }
+        # }
     }
     return retval
 }
