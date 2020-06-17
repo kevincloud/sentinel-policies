@@ -21,45 +21,41 @@ get_resources = func(resource_type) {
 }
 
 has_tags = func(resources, tags) {
-    no_tag = []
+    assigned_tags = []
+    empty_tag = []
     retval = false
+
     for resources as r {
         if "tags" in tfplan.planned_values.resources[r].values {
             if tfplan.planned_values.resources[r].values["tags"] == null {
                 retval = false
             } else {
-                print("Tags: ")
-                for tags as tag {
-                    if tag in tfplan.planned_values.resources[r].values["tags"] {
-                        print("  " + tag + ": " + tfplan.planned_values.resources[r].values["tags"][tag])
-                        if val == "" or val == null {
-                            append(no_tag, tag)
-                        }
+                for tfplan.planned_values.resources[r].values["tags"] as tag {
+                    val = tfplan.planned_values.resources[r].values["tags"][tag]
+                    if val == "" or val == null {
+                        append(empty_tag, tag)
                     } else {
-                        append(no_tag, tag)
+                        append(assigned_tags, tag)
                     }
                 }
-                # for tfplan.planned_values.resources[r].values["tags"] as tag {
-                #     val = tfplan.planned_values.resources[r].values["tags"][tag]
-                #     if tag not in tags {
-                #         append(no_tag, tag)
-                #     } else if val == "" or val == null {
-                #         append(no_tag, tag)
-                #     }
-                # }
             }
         }
     }
 
-    if length(no_tag) > 0 {
-        print("The following mandatory tags are missing:")
-        for no_tag as i {
-            print("  " + i)
-        }
-        retval = false
-    } else {
-        retval = true
+    print("Tags:")
+    for assigned_tags as t {
+        print("  " + t)
     }
+
+    # if length(no_tag) > 0 {
+    #     print("The following mandatory tags are missing:")
+    #     for no_tag as i {
+    #         print("  " + i)
+    #     }
+    #     retval = false
+    # } else {
+    #     retval = true
+    # }
 
     return retval
 }
