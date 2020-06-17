@@ -33,14 +33,32 @@ is_enc_enabled = func(resources, setting_name) {
     return retval
 }
 
-sse_value = false
+get_policy_state = func() {
+    req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/ddb-encryption")
+    res = json.unmarshal(http.get(req).body)
+    enabled = res["ddb-encryption"]
 
-if provider == "aws" {
-    ddb_tables = get_resources("aws_dynamodb_table")
-    sse_value = is_enc_enabled(ddb_tables, "server_side_encryption")
-} else {
-    print("This policy is for a different provider and will not be processed")
-    sse_value = true
+    if enabled == "true" {
+        return true
+    } else {
+        return false
+    }
 }
 
-main = rule { sse_value }
+proceed = false
+enabled = get_policy_state()
+
+if provider == "aws" {
+    if enabled {
+        ddb_tables = get_resources("aws_dynamodb_table")
+        proceed = is_enc_enabled(ddb_tables, "server_side_encryption")
+    } else {
+        print("This policy is disabled and will not be processed")
+        proceed = true
+    }
+} else {
+    print("This policy is for a different provider and will not be processed")
+    proceed = true
+}
+
+main = rule { proceed }

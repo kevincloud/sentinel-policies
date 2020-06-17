@@ -42,12 +42,29 @@ no_star_items = func(resources) {
     }
 }
 
+get_policy_state = func() {
+    req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/no-star-access")
+    res = json.unmarshal(http.get(req).body)
+    enabled = res["no-star-access"]
+
+    if enabled == "true" {
+        return true
+    } else {
+        return false
+    }
+}
 
 proceed = false
+enabled = get_policy_state()
 
 if provider == "aws" {
-    iam_roles = get_resources("aws_iam_policy")
-    proceed = no_star_items(iam_roles)
+    if enabled {
+        iam_roles = get_resources("aws_iam_policy")
+        proceed = no_star_items(iam_roles)
+    } else {
+        print("This policy is disabled and will not be processed")
+        proceed = true
+    }
 } else {
     print("This policy is for a different provider and will not be processed")
     proceed = true

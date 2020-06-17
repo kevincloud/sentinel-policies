@@ -1,3 +1,10 @@
+#
+# Ensure workspace is not using compute instances 
+# which are not approved.
+#
+
+##### Imports #####
+
 import "tfplan/v2" as tfplan
 import "http"
 import "json"
@@ -5,21 +12,37 @@ import "strings"
 
 param provider
 
-# Get all Azure VMs from all modules
-azure_vms = filter tfplan.resource_changes as _, res {
-    res.mode is "managed" and
-    res.type is "azurerm_virtual_machine"
+##### Functions #####
+
+# Get all VMs from all modules
+get_compute_instances = func(prov) {
+    resource = ""
+    if prov == "aws" {
+        resource = "aws_instance"
+    } else if prov == "azurerm" {
+        resource = "azurerm_virtual_machine"
+    }
+
+    all_vms = filter tfplan.resource_changes as _, res {
+        res.mode is "managed" and
+        res.type is resource
+    }
+
+    return all_vms
 }
 
 # Allowed Types
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/approved-instances/" + provider)
-res = json.unmarshal(http.get(req).body)
-allowed_types_orig = res
+get_approved_list = func() {
+    req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/approved-instances/" + provider)
+    res = json.unmarshal(http.get(req).body)
+    allowed_types_orig = res
 
-# Convert to lower case
-allowed_types = []
-for allowed_types_orig as a {
-    append(allowed_types, strings.to_lower(a))
+    # Convert to lower case
+    allowed_types = []
+    for allowed_types_orig as a {
+        append(allowed_types, strings.to_lower(a))
+    }
+    return allowed_types
 }
 
 # Rule to restrict instance types
@@ -37,5 +60,9 @@ instance_type_allowed = func(vms, types) {
     return true
 }
 
+vm_list = get_compute_instances(provider)
+allowed = get_approved_list()
+is_allowed = instance_type_allowed(vm_list, allowed)
+
 # Main rule that requires other rules to be true
-main = rule { instance_type_allowed(azure_vms, allowed_types) }
+main = rule { is_allowed }
