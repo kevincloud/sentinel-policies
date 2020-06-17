@@ -21,6 +21,7 @@ is_enc_enabled = func(resources, setting_name) {
         for tfplan.planned_values.resources[r].values as v {
             if strings.to_lower(v) == strings.to_lower(setting_name) {
                 for tfplan.planned_values.resources[r].values[v] as x {
+                    print(x)
                     if x["enabled"] {
                         retval = true
                     }
