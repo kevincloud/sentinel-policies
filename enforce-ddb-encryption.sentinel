@@ -21,11 +21,9 @@ is_enc_enabled = func(resources, setting_name) {
         for tfplan.planned_values.resources[r].values as v {
             if strings.to_lower(v) == strings.to_lower(setting_name) {
                 for tfplan.planned_values.resources[r].values[v] as x {
-                    res = json.unmarshal(x)
-                    for res as y {
-                        print(y)
+                    for x as y {
+                        print(y + ": " + x[y])
                     }
-                    # print(x)
                 }
             }
         }
