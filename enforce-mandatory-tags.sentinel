@@ -20,7 +20,7 @@ get_resources = func(resource_type) {
     return resources
 }
 
-has_tags = func(resources, setting_name) {
+has_tags = func(resources, tags) {
     retval = false
     for resources as r {
         for tfplan.planned_values.resources[r].values as v {
@@ -51,7 +51,7 @@ if provider == "aws" {
 
 if vm_resources != "" {
     selected_resources = get_resources()
-    result = has_tags()
+    result = has_tags(selected_resources, mandatory_tags)
 } else {
     print("This policy is for a different provider and will not be processed")
     result = true
