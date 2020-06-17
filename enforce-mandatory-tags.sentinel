@@ -49,11 +49,6 @@ has_tags = func(resources, tags) {
         }
     }
 
-    print("Tags:")
-    for assigned_tags as t {
-        print("  " + t)
-    }
-
     if length(missing_tags) > 0 {
         print("The following mandatory tags are missing or empty:")
         for missing_tags as i {
