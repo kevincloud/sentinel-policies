@@ -50,7 +50,7 @@ if provider == "aws" {
 }
 
 if vm_resources != "" {
-    selected_resources = get_resources()
+    selected_resources = get_resources(vm_resources)
     result = has_tags(selected_resources, mandatory_tags)
 } else {
     print("This policy is for a different provider and will not be processed")
