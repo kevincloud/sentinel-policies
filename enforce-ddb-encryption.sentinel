@@ -20,10 +20,10 @@ is_enc_enabled = func(resources, setting_name) {
     for resources as r {
         for tfplan.planned_values.resources[r].values as v {
             print("setting_name: " + tfplan.planned_values.resources[r].values[setting_name])
-            print("setting_enabled: " + tfplan.planned_values.resources[r].values[setting_name]["enabled"])
             if tfplan.planned_values.resources[r].values[setting_name] == null {
                 retval = false
             } else if tfplan.planned_values.resources[r].values[setting_name]["enabled"] == true {
+                print("setting_enabled: " + tfplan.planned_values.resources[r].values[setting_name]["enabled"])
                 retval = true
             }
         }
