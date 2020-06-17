@@ -33,8 +33,14 @@ is_enc_enabled = func(resources, setting_name) {
     return retval
 }
 
+sse_value = false
 
-ddb_tables = get_resources("aws_dynamodb_table")
-sse_value = is_enc_enabled(ddb_tables, "server_side_encryption")
+if provider == "aws" {
+    ddb_tables = get_resources("aws_dynamodb_table")
+    sse_value = is_enc_enabled(ddb_tables, "server_side_encryption")
+} else {
+    print("This policy is for a different provider and will not be processed")
+    sse_value = true
+}
 
 main = rule { sse_value }
