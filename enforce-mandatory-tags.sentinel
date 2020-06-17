@@ -39,6 +39,22 @@ has_tags = func(resources, setting_name) {
     return retval
 }
 
-result = true
+result = false
+vm_resources = ""
+if provider == "aws" {
+    vm_resources = "aws_instance"
+} else if provider == "azurerm" {
+    vm_resources = "azurerm_virtual_machine"
+} else {
+    result = true
+}
+
+if vm_resources != "" {
+    selected_resources = get_resources()
+    result = has_tags()
+} else {
+    print("This policy is for a different provider and will not be processed")
+    result = true
+}
 
 main = rule { result }
