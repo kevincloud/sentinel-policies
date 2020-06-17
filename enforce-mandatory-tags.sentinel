@@ -23,17 +23,21 @@ get_resources = func(resource_type) {
 has_tags = func(resources, tags) {
     retval = false
     for resources as r {
-        for tfplan.planned_values.resources[r].values as v {
-            print("Attribute: " + v)
-            # if strings.to_lower(v) == strings.to_lower(setting_name) {
-            #     for tfplan.planned_values.resources[r].values[v] as x {
-            #         print(v + ": ")
-            #         print(x)
-            #         if x["enabled"] {
-            #             retval = true
-            #         }
-            #     }
-            # }
+        if "tags" in tfplan.planned_values.resources[r].values {
+            for tfplan.planned_values.resources[r].values as v {
+                print("Attribute: " + v)
+                # if strings.to_lower(v) == strings.to_lower(setting_name) {
+                #     for tfplan.planned_values.resources[r].values[v] as x {
+                #         print(v + ": ")
+                #         print(x)
+                #         if x["enabled"] {
+                #             retval = true
+                #         }
+                #     }
+                # }
+            }
+        } else {
+            retval = false
         }
     }
     return retval
