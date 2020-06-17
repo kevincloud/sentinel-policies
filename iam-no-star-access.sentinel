@@ -18,10 +18,10 @@ star_items = func(resources) {
     for resources as r {
         print("resource: " + r)
         for tfplan.planned_values.resources[r].values as v {
+            if v == "assume_role_policy" {
+                print("actions: " + tfplan.planned_values.resources[r].values[v])
+            }
             print(v + ": ")
-            # for tfplan.planned_values.resources[r].values[v] as x {
-            #     print(x)
-            # }
         }
     }
     return true
