@@ -1,0 +1,30 @@
+import "tfplan/v2" as tfplan
+import "strings"
+import "http"
+import "json"
+
+get_resources = func(resource_type) {
+    resources = []
+    for tfplan.planned_values.resources as r {
+        if tfplan.planned_values.resources[r].type == resource_type {
+            append(resources, r)
+        }
+    }
+    return resources
+}
+
+star_items = func(resources) {
+    for resources as r {
+        for tfplan.planned_values.resources[r].values as v {
+            for tfplan.planned_values.resources[r].values[v] as x {
+                print(x)
+            }
+        }
+    }
+    return true
+}
+
+iam_roles = get_resources("iam_role")
+violations = star_items(iam_roles)
+
+main = rule { violations }

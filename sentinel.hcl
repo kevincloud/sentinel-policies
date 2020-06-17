@@ -23,5 +23,9 @@ policy "limit-custom-resources" {
 }
 
 policy "enforce-ddb-encryption" {
-    enforcement_level = "soft-mandatory"
+    enforcement_level = "hard-mandatory"
+}
+
+policy "iam-no-star-access" {
+    enforcement_level = "hard-mandatory"
 }
