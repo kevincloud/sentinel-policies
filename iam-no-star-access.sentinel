@@ -18,16 +18,16 @@ star_items = func(resources) {
     for resources as r {
         print("resource: " + r)
         for tfplan.planned_values.resources[r].values as v {
-            if v == "assume_role_policy" {
-                print("actions: " + tfplan.planned_values.resources[r].values[v])
-            }
-            print(v + ": ")
+            # if v == "assume_role_policy" {
+                print(v + " value: " + tfplan.planned_values.resources[r].values[v])
+            # }
+            print("--------------------")
         }
     }
     return true
 }
 
-iam_roles = get_resources("aws_iam_role")
+iam_roles = get_resources("aws_iam_policy")
 violations = star_items(iam_roles)
 
 main = rule { violations }
