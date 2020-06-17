@@ -19,7 +19,8 @@ star_items = func(resources) {
         print("resource: " + r)
         for tfplan.planned_values.resources[r].values as v {
             # if v == "assume_role_policy" {
-                print(v + " value: " + tfplan.planned_values.resources[r].values[v])
+                print(v + " value: ")
+                print(tfplan.planned_values.resources[r].values[v])
             # }
             print("--------------------")
         }
