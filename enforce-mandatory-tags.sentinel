@@ -23,6 +23,7 @@ get_resources = func(resource_type) {
 has_tags = func(resources, tags) {
     retval = false
     for resources as r {
+        print(tfplan.planned_values.resources[r])
         if "tags" in tfplan.planned_values.resources[r].values {
             if tfplan.planned_values.resources[r].values["tags"] == null {
                 print(tfplan.planned_values.resources[r].values["tags"])
