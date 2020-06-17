@@ -34,6 +34,5 @@ is_enc_enabled = func(resources, setting_name) {
 
 ddb_tables = get_resources("aws_dynamodb_table")
 sse_value = is_enc_enabled(ddb_tables, "server_side_encryption")
-sse_value = false
 
 main = rule { sse_value }
