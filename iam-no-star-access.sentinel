@@ -20,8 +20,8 @@ star_items = func(resources) {
             if v == "policy" {
                 res = json.unmarshal(tfplan.planned_values.resources[r].values[v])
                 for res["Statement"][0]["Action"] as a {
-                    n = strings.split(a, "*")
-                    print(a + ": " + string(n))
+                    n = strings.split(a, ":")
+                    print(a + ": " + string(length(n)))
                 }
             }
         }
