@@ -6,7 +6,7 @@ import "json"
 get_resources = func(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
-        print("Resource: " + tfplan.planned_values.resources[r].type)
+        # print("Resource: " + tfplan.planned_values.resources[r].type)
         if tfplan.planned_values.resources[r].type == resource_type {
             append(resources, r)
         }
@@ -19,7 +19,9 @@ star_items = func(resources) {
         for tfplan.planned_values.resources[r].values as v {
             if v == "policy" {
                 res = json.unmarshal(tfplan.planned_values.resources[r].values[v])
-                print(res["Statement"][0]["Action"])
+                for res["Statement"][0]["Action"] as a {
+                    print(a)
+                }
             }
         }
     }
