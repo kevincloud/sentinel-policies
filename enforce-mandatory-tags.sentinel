@@ -5,10 +5,10 @@ import "json"
 
 param provider
 
-mandatory_tags = [
-    "environment",
-    "department",
-]
+req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/tags")
+res = json.unmarshal(http.get(req).body)
+mandatory_tags = res
+
 
 get_resources = func(resource_type) {
     resources = []

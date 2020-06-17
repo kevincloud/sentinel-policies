@@ -11,10 +11,14 @@ policy "approved-instances" {
 }
 
 policy "enforce-mandatory-tags" {
-    enforcement_level = "advisory"
+    enforcement_level = "hard-mandatory"
 }
 
 policy "prevent-destroy" {
+    enforcement_level = "soft-mandatory"
+}
+
+policy "limit-cost" {
     enforcement_level = "soft-mandatory"
 }
 

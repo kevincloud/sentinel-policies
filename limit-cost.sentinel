@@ -1,0 +1,43 @@
+#
+# This policy uses the Sentinel tfrun import to restrict the
+# proposed monthly cost that would be incurred if the current
+# plan were applied
+#
+
+##### Imports #####
+
+import "tfrun"
+import "decimal"
+
+##### Functions #####
+
+# Validate that the proposed monthly cost is less than the limit
+limit_proposed_monthly_cost = func(limit) {
+
+  # Determine proposed monthly cost
+  proposed_cost = decimal.new(tfrun.cost_estimate.proposed_monthly_cost)
+
+  # Compare proposed monthly cost to the limit
+  if proposed_cost.lte(limit) {
+    print("Proposed monthly cost", proposed_cost.string,
+          "is under the limit:", limit.string)
+    return true
+  } else {
+    print("Proposed monthly cost", proposed_cost.string,
+          "is over the limit:", limit.string)
+    return false
+  }
+}
+
+##### Monthly Limit #####
+req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/max-cost")
+res = json.unmarshal(http.get(req).body)
+max_cost = decimal.new(res["prevent-deletion"])
+
+limit = decimal.new(max_cost)
+
+##### Rules #####
+cost_validated = limit_proposed_monthly_cost(limit)
+main = rule {
+  cost_validated
+}
