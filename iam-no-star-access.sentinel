@@ -27,7 +27,7 @@ star_items = func(resources) {
     return true
 }
 
-iam_roles = get_resources("iam_role")
+iam_roles = get_resources("aws_iam_role")
 violations = star_items(iam_roles)
 
 main = rule { violations }
