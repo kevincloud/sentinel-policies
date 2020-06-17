@@ -21,6 +21,9 @@ is_enc_enabled = func(resources, setting_name) {
         for tfplan.planned_values.resources[r].values as v {
             if strings.to_lower(v) == strings.to_lower(setting_name) {
                 print("setting name: " + v)
+                for tfplan.planned_values.resources[r].values[v] as x {
+                    print("  --att name: " + x)
+                }
             }
         }
         # if setting_name in tfplan.planned_values.resources[r].values {
