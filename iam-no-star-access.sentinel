@@ -16,6 +16,7 @@ get_resources = func(resource_type) {
 star_items = func(resources) {
     for resources as r {
         for tfplan.planned_values.resources[r].values as v {
+            print(v + ": ")
             for tfplan.planned_values.resources[r].values[v] as x {
                 print(x)
             }
