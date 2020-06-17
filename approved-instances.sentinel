@@ -66,7 +66,7 @@ instance_type_allowed = func(vms, types, prov) {
 
 vm_list = get_compute_instances(provider)
 allowed = get_approved_list()
-is_allowed = instance_type_allowed(vm_list, allowed, prov)
+is_allowed = instance_type_allowed(vm_list, allowed, provider)
 
 # Main rule that requires other rules to be true
 main = rule { is_allowed }
