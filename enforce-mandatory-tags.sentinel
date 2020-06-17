@@ -32,7 +32,9 @@ has_tags = func(resources, tags) {
                 for tfplan.planned_values.resources[r].values["tags"] as tag {
                     print("  " + tag + ": " + tfplan.planned_values.resources[r].values["tags"][tag])
                     val = tfplan.planned_values.resources[r].values["tags"][tag]
-                    if tag not in tags and ((tag in tags and val == "") or (tag in tags and val == null)) {
+                    if tag not in tags {
+                        append(no_tag, tag)
+                    } else if val == "" or val == null {
                         append(no_tag, tag)
                     }
                 }
