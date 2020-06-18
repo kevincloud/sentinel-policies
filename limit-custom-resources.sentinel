@@ -53,7 +53,8 @@ module_list = get_modules()
 
 # Get a list of violations
 violations = filter tfplan.resource_changes as _, res {
-    res.type in prohibited_resources
+    res.type in prohibited_resources and 
+    res.module_address not in module_list
 }
 
 # violations = []
