@@ -50,6 +50,7 @@ get_modules = func() {
 
 # Get the module list
 module_list = get_modules()
+print(module_list)
 
 # Get a list of violations
 violations = filter tfplan.resource_changes as _, res {
