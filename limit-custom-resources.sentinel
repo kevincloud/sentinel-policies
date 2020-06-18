@@ -42,7 +42,7 @@ get_modules = func() {
             # Prepend "module." due to sentinel nomenclature
             modmod = modaddr + "module." + mod
             # Add to list
-            append(modules, modname)
+            append(modules, modmod)
         }
     }
     return modules
