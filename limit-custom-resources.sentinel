@@ -36,13 +36,13 @@ get_modules = func() {
         # modname = tfconfig.module_calls[mod].name
         modname = strings.split(tfconfig.module_calls[mod].source, "/")[2]
         modaddr = "" + string(tfconfig.module_calls[mod].module_address)
-        print("source: " + tfconfig.module_calls[mod].source)
+
         if modaddr != "" {
             modaddr = modaddr + "."
         }
         if modname in required_modules {
             # Prepend "module." due to sentinel nomenclature
-            modmod = modaddr + "module." + mod
+            modmod = modaddr + "module." + modname
             # Add to list
             append(modules, modmod)
         }
