@@ -20,7 +20,7 @@ get_modules = func() {
         # We just want to get the short name of the module
         modname = strings.split(tfconfig.module_calls[mod].source, "/")
         print("Name: " + tfconfig.module_calls[mod].name)
-        print("Address: " + tfconfig.module_calls[mod].module_address)
+        print("Address: " + mod)
         # Add the module to our list
         append(modules, modname[2])
     }
