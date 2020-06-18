@@ -33,10 +33,14 @@ get_modules = func() {
     modules = []
     for tfconfig.module_calls as mod {
         # Get the short name of the module instead of the entire path.
-        modname = strings.split(tfconfig.module_calls[mod].source, "/")[2]
+        modname = tfconfig.module_calls[mod].name
+        modaddr = "" + string(tfconfig.module_calls[mod].module_address)
+        if modaddr != "" {
+            modaddr = modaddr + "."
+        }
         if modname in required_modules {
             # Prepend "module." due to sentinel nomenclature
-            # modmod = "module." + mod
+            modmod = modaddr + "module." + mod
             # Add to list
             append(modules, modname)
         }
@@ -48,25 +52,25 @@ get_modules = func() {
 module_list = get_modules()
 
 # Get a list of violations
-first_pass = filter tfplan.resource_changes as _, res {
+violations = filter tfplan.resource_changes as _, res {
     res.type in prohibited_resources
 }
 
-violations = []
-if length(first_pass) is not 0 {
-    for first_pass as _, r {
-        #if strings.has_suffix(r.module_address
-        #modules = strings.split(r.module_address)
-        #for required_modules as pr {
-        #    if pr not in modules {
-        #        if cnt == 0 {
-        #            append(violations, r)
-        #            cnt += 1
-        #        }
-        #    }
-        #}
-    }
-}
+# violations = []
+# if length(first_pass) is not 0 {
+#     for first_pass as _, r {
+        # if strings.has_suffix(r.module_address
+        # modules = strings.split(r.module_address)
+        # for required_modules as pr {
+        #     if pr not in modules {
+        #         if cnt == 0 {
+        #             append(violations, r)
+        #             cnt += 1
+        #         }
+        #     }
+        # }
+#     }
+# }
 
 if length(violations) is not 0 {
     print("The following resources cannot be created:")
