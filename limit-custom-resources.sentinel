@@ -33,12 +33,11 @@ get_modules = func() {
     modules = []
     for tfconfig.module_calls as mod {
         # Get the short name of the module instead of the entire path.
-        modname = tfconfig.module_calls[mod].name
+        # modname = tfconfig.module_calls[mod].name
+        modname = strings.split(tfconfig.module_calls[mod].source, "/")[2]
         modaddr = "" + string(tfconfig.module_calls[mod].module_address)
         print("modaddr: " + modaddr)
         if modaddr != "" {
-            #t = strings.split(modaddr[":"])
-            #modaddr = t[0] + ".module." + t[1]
             modaddr = modaddr + "."
         }
         if modname in required_modules {
