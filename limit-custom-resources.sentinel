@@ -52,17 +52,18 @@ get_modules = func() {
 
 # Get the module list
 module_list = get_modules()
-print(module_list)
 
 # Get a list of violations
-violations = filter tfplan.resource_changes as _, res {
+first_pass = filter tfplan.resource_changes as _, res {
     res.type in prohibited_resources and 
     res.module_address not in module_list
 }
 
-# violations = []
-# if length(first_pass) is not 0 {
-#     for first_pass as _, r {
+violations = []
+if length(first_pass) is not 0 {
+    for first_pass as _, r {
+        print("addr: " + r.address)
+        print("mod_addr: " + r.module_address)
         # if strings.has_suffix(r.module_address
         # modules = strings.split(r.module_address)
         # for required_modules as pr {
@@ -73,8 +74,8 @@ violations = filter tfplan.resource_changes as _, res {
         #         }
         #     }
         # }
-#     }
-# }
+    }
+}
 
 if length(violations) is not 0 {
     print("The following resources cannot be created:")
