@@ -36,7 +36,7 @@ get_modules = func() {
         modname = strings.split(tfconfig.module_calls[mod].source, "/")[2]
         if modname in required_modules {
             # Prepend "module." due to sentinel nomenclature
-            modmod = "module." + mod
+            # modmod = "module." + mod
             # Add to list
             append(modules, modmod)
         }
@@ -48,9 +48,25 @@ get_modules = func() {
 module_list = get_modules()
 
 # Get a list of violations
-violations = filter tfplan.resource_changes as _, res {
+first_pass = filter tfplan.resource_changes as _, res {
     res.type in prohibited_resources and
     res.module_address not in module_list
+}
+
+violations = []
+if length(first_pass) is not 0 {
+    for first_pass as _, r {
+        cnt = 0
+        modules = strings.split(v.module_address)
+        for required_modules as pr {
+            if pr not in modules {
+                if cnt == 0 {
+                    append(violations, r)
+                    cnt += 1
+                }
+            }
+        }
+    }
 }
 
 if length(violations) is not 0 {
