@@ -35,9 +35,11 @@ get_modules = func() {
         # Get the short name of the module instead of the entire path.
         modname = tfconfig.module_calls[mod].name
         modaddr = "" + string(tfconfig.module_calls[mod].module_address)
+        print("modaddr: " + modaddr)
         if modaddr != "" {
-            t = strings.split(modaddr[":"])
-            modaddr = t[0] + ".module." + t[1]
+            #t = strings.split(modaddr[":"])
+            #modaddr = t[0] + ".module." + t[1]
+            modaddr = modaddr + "."
         }
         if modname in required_modules {
             # Prepend "module." due to sentinel nomenclature
