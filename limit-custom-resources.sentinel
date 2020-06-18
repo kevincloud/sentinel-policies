@@ -62,8 +62,6 @@ first_pass = filter tfplan.resource_changes as _, res {
 violations = []
 if length(first_pass) is not 0 {
     for first_pass as _, r {
-        print("addr: " + r.address)
-        print("mod_addr: " + r.module_address)
         add_it = true
         for module_list as ml {
             if strings.has_prefix(r.module_address, ml) {
