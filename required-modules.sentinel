@@ -12,6 +12,7 @@ import "json"
 import "http"
 
 param provider
+param base_url
 
 # Get all referenced modules
 get_modules = func() {
@@ -26,7 +27,7 @@ get_modules = func() {
 }
 
 # These modules are required to be used
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/required-modules/" + provider)
+req = http.request(base_url + "/list/required-modules/" + provider)
 res = json.unmarshal(http.get(req).body)
 required_modules = res
 

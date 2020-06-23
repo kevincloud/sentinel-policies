@@ -4,8 +4,9 @@ import "http"
 import "json"
 
 param provider
+param base_url
 
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/tags")
+req = http.request(base_url + "/tags")
 res = json.unmarshal(http.get(req).body)
 mandatory_tags = res
 

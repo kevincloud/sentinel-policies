@@ -4,11 +4,11 @@ import "http"
 import "json"
 
 param provider
+param base_url
 
 get_resources = func(resource_type) {
     resources = []
     for tfplan.planned_values.resources as r {
-        # print("Resource: " + tfplan.planned_values.resources[r].type)
         if tfplan.planned_values.resources[r].type == resource_type {
             append(resources, r)
         }
@@ -43,7 +43,7 @@ no_star_items = func(resources) {
 }
 
 get_policy_state = func() {
-    req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/no-star-access")
+    req = http.request(base_url + "/no-star-access")
     res = json.unmarshal(http.get(req).body)
     enabled = res["no-star-access"]
 

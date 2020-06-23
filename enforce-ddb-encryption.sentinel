@@ -4,6 +4,7 @@ import "http"
 import "json"
 
 param provider
+param base_url
 
 get_resources = func(resource_type) {
     resources = []
@@ -34,7 +35,7 @@ is_enc_enabled = func(resources, setting_name) {
 }
 
 get_policy_state = func() {
-    req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/ddb-encryption")
+    req = http.request(base_url + "/ddb-encryption")
     res = json.unmarshal(http.get(req).body)
     enabled = res["ddb-encryption"]
 

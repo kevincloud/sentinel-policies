@@ -7,11 +7,13 @@
 # would be helpful.
 #
 
+param base_url
+
 import "tfplan/v2" as plan
 import "http"
 import "json"
 
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/prevent-deletion")
+req = http.request(base_url + "/prevent-deletion")
 res = json.unmarshal(http.get(req).body)
 prevent_delete = res["prevent-deletion"]
 

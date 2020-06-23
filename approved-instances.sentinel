@@ -11,6 +11,7 @@ import "json"
 import "strings"
 
 param provider
+param base_url
 
 ##### Functions #####
 
@@ -33,7 +34,7 @@ get_compute_instances = func(prov) {
 
 # Allowed Types
 get_approved_list = func() {
-    req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/approved-instances/" + provider)
+    req = http.request(base_url + "/list/approved-instances/" + provider)
     res = json.unmarshal(http.get(req).body)
     allowed_types_orig = res
 

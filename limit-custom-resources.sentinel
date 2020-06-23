@@ -17,14 +17,15 @@ import "http"
 import "json"
 
 param provider
+param base_url
 
 # Get the list of prohibited resources
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/prohibited-resources/" + provider)
+req = http.request(base_url + "/list/prohibited-resources/" + provider)
 res = json.unmarshal(http.get(req).body)
 prohibited_resources = res
 
 # Get the list of required modules
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/list/required-modules/" + provider)
+req = http.request(base_url + "/list/required-modules/" + provider)
 res = json.unmarshal(http.get(req).body)
 required_modules = res
 

@@ -11,6 +11,8 @@ import "decimal"
 import "http"
 import "json"
 
+param base_url
+
 ##### Functions #####
 
 # Validate that the proposed monthly cost is less than the limit
@@ -32,7 +34,7 @@ limit_proposed_monthly_cost = func(limit) {
 }
 
 ##### Monthly Limit #####
-req = http.request("http://sentinel-data.kcochran.azure.hashidemos.io:8080/max-cost")
+req = http.request(base_url + "/max-cost")
 res = json.unmarshal(http.get(req).body)
 max_cost = res["max-cost"]
 
