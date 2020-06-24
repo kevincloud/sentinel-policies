@@ -7,11 +7,11 @@
 # would be helpful.
 #
 
-param base_url
-
 import "tfplan/v2" as plan
 import "http"
 import "json"
+
+param base_url
 
 req = http.request(base_url + "/prevent-deletion")
 res = json.unmarshal(http.get(req).body)
