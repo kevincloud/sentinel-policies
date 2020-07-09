@@ -78,8 +78,7 @@ if length(first_pass) is not 0 {
 if length(violations) is not 0 {
     print("The following resources cannot be created:")
     for violations as _, v {
-        print("   " + v.type)
-        print("   - " + v.module_address)
+        print("   " + v.type + " (located in " + v.module_address + ")")
     }
 } else {
     print("No violations were found.")
