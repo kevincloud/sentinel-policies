@@ -1,0 +1,72 @@
+#
+# This module enforces the usage of required modules. 
+# An infrastructure team, for instance, may produce a 
+# standard set of modules for engineering teams to 
+# consume. In order to reduce risk, this policy enforces 
+# the usage of those modules. 
+#
+
+import "tfconfig/v2" as tfconfig
+import "strings"
+import "json"
+import "http"
+
+param provider
+param base_url
+
+# Get all referenced modules
+get_modules = func() {
+    modules = []
+    for tfconfig.module_calls as mod {
+        # We just want to get the short name of the module
+        modname = strings.split(tfconfig.module_calls[mod].source, "/")
+        # Add the module to our list
+        append(modules, modname[2])
+    }
+    return modules
+}
+
+module_resources = func(modules) {
+    resources = []
+
+    for resources as res {
+        print(res.module_address + ": " + res.type)
+    }
+}
+
+# These modules are required to be used
+req = http.request(base_url + "/list/required-modules/" + provider)
+res = json.unmarshal(http.get(req).body)
+required_modules = res
+
+# Store modules in a global variable
+selected_modules = get_modules()
+
+print("Required modules:")
+print(required_modules)
+
+print("Selected modules:")
+print(selected_modules)
+
+# Rule to ensure all required modules are used
+use_modules = func() {
+    missing = []
+    for required_modules as mod {
+        if mod not in selected_modules {
+            append(missing, mod)
+        }
+    }
+    if length(missing) is 0 {
+        print("All required modules are present")
+        return true
+    } else {
+        print("The following modules are missing:")
+        for missing as m {
+            print("   " + m)
+        }
+        return false
+    }
+}
+
+# If true, we passed!
+main = rule { use_modules() }

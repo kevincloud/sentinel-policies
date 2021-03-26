@@ -33,3 +33,7 @@ policy "enforce-ddb-encryption" {
 policy "iam-no-star-access" {
     enforcement_level = "hard-mandatory"
 }
+
+policy "modules" {
+    enforcement_level = "advisory"
+}
