@@ -15,8 +15,6 @@ import "http"
 param provider
 param base_url
 
-output = {}
-
 # Get all referenced modules
 # get_modules = func() {
 #     modules = []
@@ -85,14 +83,20 @@ module_resources = func() {
     }
 
     output = {
-        "required_modules": required_modules,
-        "missing_modules": missing_modules,
-        "all_modules": all_modules,
-        "prohibited_resources": prohibited_resources,
-        "failed_resources": failed_resources,
+        "modules": {
+            "required_modules": required_modules,
+            "missing_modules": missing_modules,
+            "all_modules": all_modules,
+        },
+        "resources": {
+            "prohibited_resources": prohibited_resources,
+            "failed_resources": failed_resources,
+        },
         "status": passed,
         "errors": errors,
     }
+
+    print(json.marshal(output))
 
     return passed
 }
@@ -105,8 +109,6 @@ module_resources = func() {
 
 # print("Selected modules:")
 # print(selected_modules)
-
-print(json.marshal(output))
 
 # If true, we passed!
 main = rule { module_resources() }
