@@ -43,8 +43,15 @@ module_resources = func() {
 
     for tfconfig.resources as res {
         restype = tfconfig.resources[res].type
-        if restype in prohibited_resources {
-            append(failed_resources, restype)
+        modname = tfconfig.resources[res].module_address
+        if modname != "" {
+            modfull = strings.split(modname, ".")
+            modname = modfull[1]
+        }
+        if modname not in required_modules {
+            if restype in prohibited_resources {
+                append(failed_resources, restype)
+            }
         }
     }
 
