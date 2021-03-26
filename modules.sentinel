@@ -27,11 +27,34 @@ get_modules = func() {
 }
 
 module_resources = func() {
-    all_resources = []
+    prohibited_resources = []
+    failed_resources = []
 
     for tfconfig.resources as res {
-        print(tfconfig.resources[res].module_address + ": " + tfconfig.resources[res].type)
+        modaddr = tfconfig.resources[res].module_address
+        if modaddr != "" {
+            modfull = strings.split(modaddr)
+            modname = modfull[1]
+            if modname in required_modules {
+                append(prohibited_resources, tfconfig.resources[res].type)
+            }
+        }
     }
+
+    for tfconfig.resources as res {
+        restype = tfconfig.resources[res].type
+        if restype in prohibited_resources {
+            append(failed_resources, restype)
+        }
+    }
+
+    if length(failed_resources) != 0 {
+        print("You cannot create the following resources:")
+        for failed_resources as res {
+            print("  " + res)
+        }
+    }
+
     return all_resources
 }
 
