@@ -30,7 +30,7 @@ module_resources = func() {
     all_resources = []
 
     for tfconfig.resources as res {
-        print(res.module_address + ": " + res.type)
+        print(tfconfig.resources[res].module_address + ": " + tfconfig.resources[res].type)
     }
     return all_resources
 }
