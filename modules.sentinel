@@ -55,7 +55,7 @@ module_resources = func() {
         }
     }
 
-    return all_resources
+    return failed_resources
 }
 
 # These modules are required to be used
