@@ -26,12 +26,13 @@ get_modules = func() {
     return modules
 }
 
-module_resources = func(modules) {
-    resources = []
+module_resources = func() {
+    all_resources = []
 
-    for resources as res {
+    for tfcoonfig.resources as res {
         print(res.module_address + ": " + res.type)
     }
+    return all_resources
 }
 
 # These modules are required to be used
@@ -51,6 +52,7 @@ print(selected_modules)
 # Rule to ensure all required modules are used
 use_modules = func() {
     missing = []
+    test = []
     for required_modules as mod {
         if mod not in selected_modules {
             append(missing, mod)
@@ -58,6 +60,7 @@ use_modules = func() {
     }
     if length(missing) is 0 {
         print("All required modules are present")
+        test = module_resources()
         return true
     } else {
         print("The following modules are missing:")
