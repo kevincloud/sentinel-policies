@@ -88,7 +88,7 @@ module_resources = func() {
         "modules": {
             "required_modules": required_modules,
             "missing_modules": missing_modules,
-            "all_modules": all_modules
+            "all_modules": all_modules,
         },
         "resources": {
             "prohibited_resources": prohibited_resources,
