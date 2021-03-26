@@ -33,7 +33,7 @@ module_resources = func() {
     for tfconfig.resources as res {
         modaddr = tfconfig.resources[res].module_address
         if modaddr != "" {
-            modfull = strings.split(modaddr)
+            modfull = strings.split(modaddr, ".")
             modname = modfull[1]
             if modname in required_modules {
                 append(prohibited_resources, tfconfig.resources[res].type)
