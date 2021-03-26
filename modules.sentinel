@@ -15,18 +15,6 @@ import "http"
 param provider
 param base_url
 
-# Get all referenced modules
-# get_modules = func() {
-#     modules = []
-#     for tfconfig.module_calls as mod {
-#         # We just want to get the short name of the module
-#         modname = strings.split(tfconfig.module_calls[mod].source, "/")
-#         # Add the module to our list
-#         append(modules, modname[2])
-#     }
-#     return modules
-# }
-
 # These modules are required to be used
 req = http.request(base_url + "/list/required-modules/" + provider)
 res = json.unmarshal(http.get(req).body)
@@ -56,10 +44,9 @@ module_resources = func() {
         }
     }
 
-    for all_modules as mod {
-        if mod not in required_modules {
+    for required_modules as mod {
+        if mod not in all_modules {
             append(missing_modules, mod)
-            append(errors, "Missing required modules")
             passed = false
         }
     }
@@ -76,10 +63,16 @@ module_resources = func() {
         if modname not in required_modules {
             if restype in prohibited_resources {
                 append(failed_resources, restype)
-                append(errors, "Attempt to create prohibited resources")
                 passed = false
             }
         }
+    }
+
+    if length(missing_modules) > 0 {
+        append(errors, "Missing required modules")
+    }
+    if length(failed_resources) > 0 {
+        append(errors, "Attempt to create prohibited resources")
     }
 
     output = {
@@ -100,15 +93,6 @@ module_resources = func() {
 
     return passed
 }
-
-# # Store modules in a global variable
-# selected_modules = get_modules()
-
-# print("Required modules:")
-# print(required_modules)
-
-# print("Selected modules:")
-# print(selected_modules)
 
 # If true, we passed!
 main = rule { module_resources() }
